@@ -1,0 +1,48 @@
+1. database normalization(数据库范式)
+If a table is not properly normalized and have data redundancy then it will not only eat up extra memory space but will also make it difficult to handle and update the database, without facing data loss. Insertion, Updation and Deletion Anamolies are very frequent if database is not normalized.
+
+First Normal Form (1NF)
+1NF的定义为：符合1NF的关系中的每个属性都不可再分。
+For a table to be in the First Normal Form, it should follow the following 4 rules:
+
+1. It should only have single(atomic) valued attributes/columns.
+2. Values stored in a column should be of the same domain
+3. All the columns in a table should have unique names.
+4. And the order in which data is stored, does not matter.
+
+Second Normal Form (2NF)
+2NF在1NF的基础之上，消除了非主属性对于码的部分函数依赖。
+若在一张表中，在属性（或属性组）X的值确定的情况下，必定能确定属性Y的值，那么就可以说Y函数依赖于X，写作 X → Y
+
+For a table to be in the Second Normal Form,
+
+1. It should be in the First Normal form.
+2. And, it should not have Partial Dependency.
+
+Third Normal Form (3NF)
+第三范式（3NF） 3NF在2NF的基础之上，消除了非主属性对于码的传递函数依赖。
+A table is said to be in the Third Normal Form when,
+
+1. It is in the Second Normal form.
+2. And, it doesn't have Transitive Dependency. (可迁移的)
+
+
+Boyce and Codd Normal Form (BCNF)
+Boyce and Codd Normal Form is a higher version of the Third Normal form. This form deals with certain type of anomaly that is not handled by 3NF. A 3NF table which does not have multiple overlapping candidate keys is said to be in BCNF. For a table to be in BCNF, following conditions must be satisfied:
+
+1. R must be in 3rd Normal Form
+2. and, for each functional dependency ( X → Y ), X should be a super Key.
+
+
+Fourth Normal Form (4NF)
+A table is said to be in the Fourth Normal Form when,
+
+1. It is in the Boyce-Codd Normal Form.
+2. And, it doesn't have Multi-Valued Dependency.
+
+通俗讲范式：
+1）第一范式：属性不可拆分。
+2）第二范式：每个表中的非主属性完全依赖于码。
+3）第三范式：消除非主属性之间的依赖关系，只保留非主属性与码的依赖关系。
+（消除传递函数依赖的另一说法，本质是一样的）
+4）BC范式：每个表中只有一个候选键。
