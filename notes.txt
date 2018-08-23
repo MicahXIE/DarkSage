@@ -46,3 +46,33 @@ A table is said to be in the Fourth Normal Form when,
 3）第三范式：消除非主属性之间的依赖关系，只保留非主属性与码的依赖关系。
 （消除传递函数依赖的另一说法，本质是一样的）
 4）BC范式：每个表中只有一个候选键。
+
+
+
+
+
+2. Advanced Select
+
+Case具有两种格式。简单Case函数和Case搜索函数。 
+--简单Case函数 
+CASE sex 
+         WHEN '1' THEN '男' 
+         WHEN '2' THEN '女' 
+ELSE '其他' END 
+--Case搜索函数 
+CASE WHEN sex = '1' THEN '男' 
+         WHEN sex = '2' THEN '女' 
+ELSE '其他' END 
+
+
+
+IF(expr1,expr2,expr3) 
+如果expr1是TRUE(expr1<>;0且expr1<>;NULL)，那么IF()返回expr2，否则它返回expr3。IF()返回一个数字或字符串值，取决于它被使用的上下文。 
+
+<> not equal to
+
+select IF(1>;2,2,3);  //3
+select IF(1<2,'yes','no');  //yes
+select IF(strcmp('test','test1'),'yes','no');  //no
+
+原文出自：www.hangge.com  转载请保留原文链接：http://www.hangge.com/blog/cache/detail_682.html
