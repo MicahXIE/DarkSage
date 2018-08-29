@@ -76,3 +76,16 @@ select IF(1<2,'yes','no');  //yes
 select IF(strcmp('test','test1'),'yes','no');  //no
 
 原文出自：www.hangge.com  转载请保留原文链接：http://www.hangge.com/blog/cache/detail_682.html
+
+
+
+3. Aggregation
+
+sql start: /usr/local/Cellar/mysql/5.7.20/support-files
+mysql.server start
+
+database default order by is asc not desc
+
+LIMIT reference: https://segmentfault.com/a/1190000008859706
+
+
