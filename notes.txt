@@ -89,3 +89,18 @@ database default order by is asc not desc
 LIMIT reference: https://segmentfault.com/a/1190000008859706
 
 
+
+4. Basic Join
+
+oracle if-else reference:
+http://www.cnblogs.com/eshizhan/archive/2012/04/06/2435493.html
+
+
+
+
+
+
+
+
+
+
