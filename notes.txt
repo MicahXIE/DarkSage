@@ -95,6 +95,10 @@ LIMIT reference: https://segmentfault.com/a/1190000008859706
 oracle if-else reference:
 http://www.cnblogs.com/eshizhan/archive/2012/04/06/2435493.html
 
+inner,outer,left,right,full join reference:
+https://www.cnblogs.com/BeginMan/p/3754322.html
+https://www.hackerrank.com/challenges/full-score/problem
+
 
 
 
