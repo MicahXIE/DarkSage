@@ -103,6 +103,17 @@ group by and subquery:
 # group by can appear multiple lines for same age and power
 SELECT w.id, wp.age, w.coins_needed, w.power FROM Wands w INNER JOIN Wands_Property wp ON w.code = wp.code WHERE wp.is_evil = 0 and w.coins_needed = (SELECT MIN(w1.coins_needed) FROM Wands w1 INNER JOIN Wands_Property wp1 ON w1.code = wp1.code WHERE w1.power = w.power and wp1.age = wp.age) ORDER BY w.power DESC, wp.age DESC;
 
+MIN() MAX() SUM() AVG() COUNT() COUNT(*)
+
+Mixed: aggregation and non-aggregation use group by
+WHERE: can not use aggregate function
+HAVING and ORDER BY: can use aggregate function
+
+
+
+
+
+
 
 
 
