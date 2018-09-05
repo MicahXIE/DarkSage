@@ -14,6 +14,8 @@ will add multiple times when the same challenge has several equal max value
 
 */
 
+# MYSQL
+
 select h.hacker_id, name, sum(score) as total_score
 from
 hackers as h inner join
@@ -29,3 +31,13 @@ having total_score > 0
 /* finally order as required */
 order by total_score desc, h.hacker_id
 ;
+
+# ORACLE: remove as
+
+select h.hacker_id, name, sum(score) from hackers h inner join 
+(select hacker_id,  max(score) as score from submissions group by challenge_id, hacker_id) max_score
+on h.hacker_id=max_score.hacker_id
+group by h.hacker_id, name
+having sum(score) > 0
+order by sum(score) desc, h.hacker_id; 
+
