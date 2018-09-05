@@ -9,6 +9,9 @@ WHERE s1.hacker_id = s.hacker_id and s1.challenge_id = s.challenge_id)
 GROUP BY s.hacker_id, h.name HAVING SUM(s.score) > 0  
 ORDER BY SUM(s.score) DESC, s.hacker_id ASC; 
 
+reason:
+will add multiple times when the same challenge has several equal max value
+
 */
 
 select h.hacker_id, name, sum(score) as total_score
