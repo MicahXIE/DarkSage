@@ -33,6 +33,8 @@ order by total_score desc, h.hacker_id
 ;
 
 # ORACLE: remove as
+# When you define a column alias, like decision, 
+#in a query, you can use it in the ORDER BY clause. That's the only place in that query where you can use it.
 
 select h.hacker_id, name, sum(score) from hackers h inner join 
 (select hacker_id,  max(score) as score from submissions group by challenge_id, hacker_id) max_score
