@@ -35,3 +35,21 @@ INSERT INTO Submissions1 (submission_id, hacker_id, challenge_id, score)
                     (67194, 74842, 63132, 76), (64479, 74842, 19797, 98), (81614, 84072, 49593, 100),
                     (6943, 4071, 19797, 95), (84264, 84072, 63132, 0), (9951, 4071, 49593, 43),
                     (53795, 74842, 19797, 5), (10063, 4071, 49593, 96);
+
+
+3. Symmetric Pairs table
+
+CREATE TABLE IF NOT EXISTS `Functions`(
+   `X` INT NOT NULL,
+   `Y` INT NOT NULL,
+   PRIMARY KEY ( `X` )
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO Functions (X, Y)
+                    VALUES
+                    (20, 20), (20, 20), (20, 21), (23, 22), (22, 23), (21, 20);
+
+
+
+
+
