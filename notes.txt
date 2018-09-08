@@ -110,6 +110,14 @@ WHERE: can not use aggregate function
 HAVING and ORDER BY: can use aggregate function
 
 
+ORACLE Example:
+ECLARE
+    v_text VARCHAR2(10); -- declare
+BEGIN
+    v_text := 'Hello';  --assign
+    dbms_output.Put_line(v_text); --display
+END; 
+
 
 
 
