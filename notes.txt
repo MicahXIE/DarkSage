@@ -124,6 +124,11 @@ https://blog.csdn.net/Seandba/article/details/72899035
 oracle for, while, do...while
 https://blog.csdn.net/baidu_37107022/article/details/75712139
 
+mysql:
+information_schema.tables
+oracle:
+dual connect by level
+
 SQL> declare
   2      v_ind     NUMBER;
   3      v_current NUMBER;
@@ -144,7 +149,31 @@ SQL> declare
 
 
 
-  
+WITH x AS (
+  SELECT * FROM generate_series( 2, 1000 ) x
+)
+SELECT x.x
+FROM x
+WHERE NOT EXISTS (
+  SELECT 1 FROM x y
+  WHERE x.x > y.x AND x.x % y.x = 0
+)
+;
+
+
+WITH x AS(
+    SELECT level+1 x
+    FROM dual
+    CONNECT BY LEVEL <= 999
+)
+SELECT x.x
+FROM x
+WHERE NOT EXISTS (
+  SELECT 1 FROM x y
+  WHERE x.x > y.x AND remainder( x.x, y.x) = 0
+)
+;
+
 
 
 
