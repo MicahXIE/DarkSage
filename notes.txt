@@ -116,7 +116,35 @@ ECLARE
 BEGIN
     v_text := 'Hello';  --assign
     dbms_output.Put_line(v_text); --display
-END; 
+END;
+
+oracle connect by level
+https://blog.csdn.net/Seandba/article/details/72899035
+
+oracle for, while, do...while
+https://blog.csdn.net/baidu_37107022/article/details/75712139
+
+SQL> declare
+  2      v_ind     NUMBER;
+  3      v_current NUMBER;
+  4  begin
+  5      v_current:=0;
+  6      while v_current<=25
+  7      loop
+  8          v_ind:=0;
+  9          while v_ind<4
+ 10          loop
+ 11              v_ind:= v_ind+1;
+ 12              DBMS_OUTPUT.put_line(v_current);
+ 13          end loop;
+ 14          v_current:=v_current+5;
+ 15      end loop;
+ 16  end;
+
+
+
+
+  
 
 
 
