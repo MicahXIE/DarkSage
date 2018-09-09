@@ -176,9 +176,30 @@ WHERE NOT EXISTS (
 
 
 
+I wanted to clarify some more use between the ; and the /
+
+In SQLPLUS:
+
+1. ; means "terminate the current statement, execute it and store it to the SQLPLUS buffer"
+2. <newline> after a D.M.L. (SELECT, UPDATE, INSERT,...) statement or some types of D.D.L 
+(Creating Tables and Views) statements (that contain no ;), it means, store the statement to the buffer 
+but do not run it.
+3. / after entering a statement into the buffer (with a blank <newline>) means "run the D.M.L. or D.D.L. 
+or PL/SQL in the buffer. 
+4. RUN or R is a sqlsplus command to show/output the SQL in the buffer and run it. 
+It will not terminate a SQL Statement.
+5. / during the entering of a D.M.L. or D.D.L. or PL/SQL means "terminate the current statement, 
+execute it and store it to the SQLPLUS buffer"
+
+NOTE: Because ; are used for PL/SQL to end a statement ; cannot be used by SQLPLUS 
+to mean "terminate the current statement, execute it and store it to the SQLPLUS buffer" 
+because we want the whole PL/SQL block to be completely in the buffer, then execute it. 
 
 
+PL/SQL blocks must end with:
 
+END;
+/
 
 
 
