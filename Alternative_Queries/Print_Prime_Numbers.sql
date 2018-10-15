@@ -37,6 +37,7 @@ END;
 SELECT GROUP_CONCAT(NUMB SEPARATOR '&')
 FROM (
     SELECT @num:=@num+1 as NUMB FROM
+    # infomation_schema.tables less than 1000 so need to use two tables t1, t2
     information_schema.tables t1,
     information_schema.tables t2,
     (SELECT @num:=1) tmp
