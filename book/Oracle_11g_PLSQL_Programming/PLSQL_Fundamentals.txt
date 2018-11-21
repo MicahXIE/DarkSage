@@ -78,4 +78,89 @@ They act like functions in many ways but cannot return a datatype.
 
 the $$ symbol denotes a PL/SQL conditional compilation-time variable.
 
+8.
+						
+Optimization Level			Optimization Meaning
+0							No optimization.
+1							Moderate optimization, may eliminate unused code or exceptions.
+2 (default)					Aggressive optimization, may rearrange source code flow.
+
+
+Regular Expressions:
+■ REGEXP_LIKE This searches a string for a regular expression pattern match.
+■ REGEXP_INSTR This searches for the beginning position of a regular expression
+pattern match.
+■ REGEXP_SUBSTR This searches for a substring using a regular expression pattern match.
+■ REGEXP_REPLACE This replaces a substring using a regular expression pattern match.
+
+
+Quoting:
+old way is
+SELECT 'It''s a bird, no plane, no it can''t be ice cream!' AS phrase
+FROM   dual;
+
+The new way is
+SELECT q'(It's a bird, no plane, no it can't be ice cream!)' AS phrase
+FROM   dual;
+ 
+
+Both of these produce the following output:
+PHRASE
+------------------------------------------------
+It's a bird, no plane, no it can't be ice cream!
+
+
+exception e.g
+DBMS_UTILITY.FORMAT_ERROR_BACKTRACE
+DBMS_UTILITY.FORMAT_CALL_STACK
+DBMS_UTILITY.FORMAT_ERROR_STACK
+
+anonymous block:
+
+DECLARE
+  local_exception EXCEPTION;
+  FUNCTION nested_local_function
+  RETURN BOOLEAN IS
+    retval BOOLEAN := FALSE;
+  BEGIN
+    RAISE local_exception;
+    RETURN retval;
+  END;
+BEGIN
+  IF nested_local_function THEN
+    dbms_output.put_line('No raised exception');
+  END IF;
+EXCEPTION
+  WHEN others THEN
+	dbms_output.put_line('DBMS_UTILITY.FORMAT_CALL_STACK'); dbms_output.put_line('------------------------------'); dbms_output.put_line(dbms_utility.format_call_stack); dbms_output.put_line('DBMS_UTILITY.FORMAT_ERROR_BACKTRACE'); dbms_output.put_line('-----------------------------------'); dbms_output.put_line(dbms_utility.format_error_backtrace); dbms_output.put_line('DBMS_UTILITY.FORMAT_ERROR_STACK'); dbms_output.put_line('-------------------------------'); dbms_output.put_line(dbms_utility.format_error_stack);
+END; /
+
+
+
+Wrapping PLSQL
+
+hello world example:
+
+BEGIN dbms_ddl.create_wrapped(
+    'CREATE OR REPLACE FUNCTION hello_world RETURN STRING AS '
+    ||'BEGIN '
+    ||'  RETURN ''Hello World!''; '
+    ||'END;');
+END; /
+
+
+SQL> COLUMN message FORMAT A20 HEADING "Message"
+SQL> SELECT hello_world AS message FROM dual;
+Message
+--------------------
+Hello World!
+
+You can test this by querying stored function implementation in the TEXT column of the USER_SOURCE table, like the following:
+SQL> COLUMN text FORMAT A80 HEADING "Source Text"
+SQL> SET PAGESIZE 49999
+SQL> SELECT text FROM user_source WHERE name = 'HELLO_WORLD';
+
+
+
+
 
