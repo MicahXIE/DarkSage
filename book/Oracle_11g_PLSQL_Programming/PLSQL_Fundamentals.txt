@@ -1,0 +1,81 @@
+PLSQL Fundamentals
+
+1. PL/SQL stands for Procedure Language/Structured Query Language
+
+2. The PL/SQL code in this book uses uppercase for command words and lowercase for variables, column names, and stored program calls.
+
+3. PL/SQL was developed by modeling concepts of structured programming, static data typing, modularity, exception management, and parallel (concurrent) processing found in the Ada programming language.
+
+4. 
+Anchoring PL/SQL variables to database catalog objects is an effective form of structural coupling.
+
+Subtyping the base types let Oracle develop a multiple-hierarchy object tree, which continues to grow and mature. 
+
+PL/SQL also supports building SQL statements at run time. Run-time SQL statements are dynamic SQL. You can use two approaches for dynamic SQL: one is Native Dynamic SQL (NDS) and the other is the DBMS_SQL package. 
+
+5. anoymous-block prototype:
+
+[DECLARE]
+       declaration_statements
+BEGIN
+       execution_statements
+[EXCEPTION]
+       exception_handling_statements
+END; /
+
+
+
+The declaration block lets you define datatypes, structures, and variables.
+
+The execution block lets you process data. The execution block can contain variable assignments, comparisons, conditional operations, and iterations.
+
+The BEGIN reserved word starts the exception block, and the optional EXCEPTION or required END reserved word ends it.
+
+The exception handling block lets you manage exceptions. You can both catch and manage them there.
+
+
+6. Named Block
+
+
+FUNCTION function_name
+[( parameter1 [IN][OUT] [NOCOPY] sql_data_type | plsql_data_type
+, parameter2 [IN][OUT] [NOCOPY] sql_data_type | plsql_data_type
+, parameter(n+1) [IN][OUT] [NOCOPY] sql_data_type | plsql_data_type )]
+
+RETURN [ sql_data_type | plsql_data_type ]
+[ AUTHID {DEFINER | CURRENT_USER}]
+[ DETERMINISTIC | PARALLEL_ENABLED ]
+[ PIPELINED ]
+[ RESULT_CACHE [RELIES ON table_name]] IS
+  declaration_statements
+BEGIN
+  execution_statements
+[EXCEPTION]
+  exception_handling_statements
+END; /
+
+
+Functions can behave as pass-by-value or pass-by-reference subroutines. Pass-by-value subroutines define formal parameters using an IN mode only. This means that the variable passed in cannot change during execution of the subroutine. Pass-by-reference subroutines define formal parameters using IN and OUT, or OUT-only modes.
+
+
+Oracle 11g continues passing copies of variables instead of references to variables, unless you designate a NOCOPY hint. 
+
+
+7. Named-block procedure prototype:
+
+PROCEDURE procedure_name
+( parameter1 [IN][OUT] [NOCOPY] sql_data_type | plsql_data_type , parameter2 [IN][OUT] [NOCOPY] sql_data_type | plsql_data_type , parameter(n+1) [IN][OUT] [NOCOPY] sql_data_type | plsql_data_type ) [ AUTHID {DEFINER | CURRENT_USER}]
+  declaration_statements
+BEGIN
+  execution_statements
+[EXCEPTION]
+  exception_handling_statements
+END; /
+
+
+They act like functions in many ways but cannot return a datatype.
+
+
+the $$ symbol denotes a PL/SQL conditional compilation-time variable.
+
+

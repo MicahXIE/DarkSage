@@ -111,7 +111,7 @@ HAVING and ORDER BY: can use aggregate function
 
 
 ORACLE Example:
-ECLARE
+DECLARE
     v_text VARCHAR2(10); -- declare
 BEGIN
     v_text := 'Hello';  --assign
@@ -300,6 +300,15 @@ mysql> select count(*) from tables;
 | INNODB_SYS_FOREIGN                    |
 | INNODB_SYS_TABLESTATS                 |
 +---------------------------------------+
+
+
+5. Misc
+
+1) row number
+mysql: LIMIT 1
+oracle: ROWNUM<=1
+
+
 
 
 
