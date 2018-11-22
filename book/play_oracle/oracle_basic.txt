@@ -1,0 +1,49 @@
+oracle 9i (vedio by Han shunping)
+
+1. oracle 9i start will need more than 100M memory (for MYORA1)
+
+2. two important processes: TNSListener (JDBC etc. ) and MYORA1
+
+3. sys, system, scott (initial users). accesses are different.
+
+4. 
+
+SQL> show user
+
+SQL> conn system/manager (switch user)
+
+SQL> dis(connect)
+
+SQL> passw(ord) (change password, sys/system)
+
+SQL> exit
+
+file operation
+
+aa.sql:
+select * from emp;
+
+SQL> start d:\aa.sql (or @ d:\aa.sql)
+SQL> edit d:\aa.sql
+
+SQL> spool d:\bb.sql
+SQL> select * from emp;
+SQL> spool off
+
+
+user table
+
+SQL> select * from user_tab_comments 
+
+env setup
+
+SQL> show linesize
+SQL> set linesize 90
+SQL> set pagesize 2
+
+
+
+
+
+
+
