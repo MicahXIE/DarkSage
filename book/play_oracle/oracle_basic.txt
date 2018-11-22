@@ -41,6 +41,51 @@ SQL> show linesize
 SQL> set linesize 90
 SQL> set pagesize 2
 
+5. user management
+
+system or dba
+
+SQL> create user xiaoming identified by m123 (start w alphabet)
+SQL> password xiaoming
+SQL> drop user xiaoming [cascade]
+
+when drop the user, if user already created tables, need to add parameter
+cascade to drop user.
+
+
+new creating user doesn't have the permission to login in the database server
+SQL> grant connect to xiaoming (connect, resource, dba role)
+
+140 kinds of accesses or permission
+system permission: databases related, create session
+object permission: user permission to other user data object
+
+data object: tables, views, fuctions, procedure, roles, tablesapces etc.
+
+roles(different types of users, simple for permission management):
+pre-defined roles
+customized roles
+
+System permission(connect, resource, dba):
+SQL> grant resource to xiaoming;
+SQL> create table test(testid varchar2(20), name varchar2(20));
+SQL> select * from test;
+
+
+Object permission(select, insert, update, delete, all, create index):
+SQL> grant select on emp to xiaoming;
+SQL> conn xiaoming/m1234;
+SQL> select * from scott.emp; (if not use scott, default is local table)
+
+
+revoke permission:
+SQL> revoke select on emp from xiaoming;
+
+
+
+
+
+
 
 
 
