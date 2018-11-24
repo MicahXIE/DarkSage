@@ -81,6 +81,59 @@ SQL> select * from scott.emp; (if not use scott, default is local table)
 revoke permission:
 SQL> revoke select on emp from xiaoming;
 
+permission pass:
+SQL> grant select on emp to xiaoming with grant option;
+SQL> grant connect to xiaoming with admin option
+
+
+cascade revoke
+
+
+6. Profile (login and password limitation)s
+SQL> create profile lock_account limit failed_login_attempts 3 password_lock_time 2;
+SQL> alter user xiaoming profile lock_account;
+unlock
+SQL> alter user xiaoming unlock;
+change password limitation
+SQL> create profile myprofile limit password_life_time 10 password_grace_time 2;
+SQL> alter user xiaoming profile myprofile;
+password history
+SQL> create profile password_history limit password_life_time 10 password_grace_time 2 
+password_reuse_time 10;
+
+delete profile
+SQL> drop profile password_history[cascase]
+
+
+7. Table Management
+
+Table name
+1. start with alphabeta
+2. less than 30 chars
+3. A-Z, a-z, 0-9, $, # etc
+4. can't use the oracle key words
+
+data type:
+char: fixed length	(max 2000)	e.g. char(10)
+varchar2: variable length	(max 4000)	e.g. varchar2(20)
+clob: character large object (max 4G)
+number: range from 10^(-38) to 10^38 number(5) e.g 99999, number(5,2) e.g 999.99
+
+
+tips
+
+VARCHAR is reserved by Oracle to support distinction between NULL and empty string in future, as ANSI standard prescribes. VARCHAR2 does not distinguish between a NULL and empty string, and never will. If you rely on empty string and NULL being the same thing, you should use VARCHAR2 .
+
+
+
+
+
+default user:
+sys/change_on_install
+system/manager
+
+
+
 
 
 
