@@ -118,6 +118,64 @@ char: fixed length	(max 2000)	e.g. char(10)
 varchar2: variable length	(max 4000)	e.g. varchar2(20)
 clob: character large object (max 4G)
 number: range from 10^(-38) to 10^38 number(5) e.g 99999, number(5,2) e.g 999.99
+date
+timestamp
+blob: binary data e.g. pic and sound (usually store path)
+
+question: date not define null?
+
+-- comment
+
+SQL> create table student (
+xh number(4),
+xm varchar2(20),
+sex char(2),
+birthday date,
+salary number(7,2)
+);
+
+table spaces(disk level): store table place (like c:\ d:\ e:\)
+
+SQL> create table classes (
+classId number(2),
+cname varchar2(40)
+);
+
+SQL>alter table student add (classid number(2));
+SQL>alter table student modify (xm varchar2(30));
+SQL>desc student;
+--must empty table
+SQL>alter table student modify (xm char(30));
+SQL>alter table student drop column sal;
+SQL>rename student to stu;
+SQL>drop table student;
+
+
+SQL>insert into student values (1, 'xiaoming', 'M', '11-5月-2005', 2345.6, 12);
+SQL>alter session set nls_date_format = 'yyyy-mm-dd';
+SQL>insert into student values (2, 'xiaoming2', 'M', '2005-05-11', 2345.6, 12);
+partial insertion
+SQL>insert into student (xh, xm, sex) values (3, 'John', 'F');
+SQL>insert into student (xh, xm, sex, birthday) values (4, 'aa', 'F', null);
+SQL>select * from student where birthday is null;(or is not null);
+
+
+SQL>update student set sex='M' where xh=3;
+SQL>update student set sex='M', birthday='1980-04-01' where xh=3;
+SQL>update student set sal=sal/2 where sex = 'M';
+
+-- set new one will overwrite previous one savepoint
+SQL>savepoint a;
+SQL>delete from student;
+SQL>rollback to a;
+
+-- can't rollback and didn't write the log. Faster than delete
+SQL>truncate table student; 
+
+SQL>delete from student where xh=3;
+SQL>drop table student;
+
+
 
 
 tips
