@@ -76,10 +76,60 @@ SQL> select ename, (sal+nvl(comm,0))*12 as annual_sal from emp order by annual_s
 
 3. Advanced Query
 
+aggregated functions:
+
 MAX(), MIN(), AVG(), SUM(), COUNT()
 
+only can be used in select..group by, having, order by
+sequence: group by, having, order by
+goup by field must in select clause
+
+-- highlight aggregated functions!
 -- sal = max(sal) is wrong, aggregate functions can't be put in where
 SQL> select ename, sal from emp e1 where sal = (select max(sal) from emp e2); 
+SQL> select * from emp where sal > (select avg(sal) from emp);
+
+
+-- group by and having
+-- can use aggregated function
+-- aggregated field (group by field) must appear in select clause
+SQL> select avg(sal), max(sal), deptno from emp group by deptno;
+SQL> select min(sal), avg(sal), max(sal), deptno, job from emp group by deptno, job;
+SQL> select deptno, avg(sal) from emp group by deptno having avg(sal) > 2000 order by avg(sal);
+
+
+-- multiple tables (Cartesian product conditions must be no less than table numbers-1)
+SQL> select e.ename, e.sal, d.dname from emp e, dept d where e.depno = d.depno;
+SQL> select d.dname, e.ename, e.sal from dept d, emp e where d.depno = e.depno and d.depno = 10;
+SQL> select e.ename, e.sal, s.grade from emp e, salgrade s where e.sal between s.losal and s.hisal;
+SQL> select e.ename, e.sal, d.dname from emp e, dept d where e.deptno = d.deptno order by e.deptno;
+-- self join
+SQL> select e1.ename, e2.ename from emp e1, emp e2 where e1.mgr = e2.empno and e1.ename = 'FORD'; 
+
+
+-- subquery or nested query
+SQL> select deptno from emp where ename = 'SMITH';
+-- single line : subquery only return one line
+SQL> select * from emp where deptno = (select deptno from emp where ename = 'SMITH');
+-- multiple line : subquery return multiple lines. usually use in, all, any
+SQL> select * from emp where job in (select job from emp where deptno = 10);
+
+SQL> select ename, sal, deptno from emp where sal > all(select sal from emp where deptno=30);
+SQL> select ename, sal, deptno from emp where sal > (select max(sal) from emp where deptno=30);
+second is better
+
+SQL> select ename, sal, deptno from emp where sal > any(select sal from emp where deptno=30);
+SQL> select ename, sal, deptno from emp where sal > (select min(sal) from emp where deptno=30);
+second is better
+
+-- multiple columns subquery to get value
+SQL> select deptno, job from emp where ename = 'SMITH';
+SQL> select * from emp where (deptno,job) = (select deptno,job from emp where ename = 'SMITH');
+
+-- highlight subquery as new table
+SQL> select deptno, avg(sal) as mysal from emp group by deptno;
+SQL> select e2.ename, e2.sal, e2.deptno, e1.sal from emp e2, (select deptno, avg(sal) as mysal from emp group by deptno) e1, where e2.deptno = e1.deptno and e2.sal > e1.sal;
+
 
 
 
