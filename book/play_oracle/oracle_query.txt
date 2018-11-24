@@ -1,0 +1,85 @@
+Oracle Query
+
+1. 
+SQL> clear;
+
+emp, dept tables
+
+emp table:
+FIELDS:										TYPES:
+EMPNO										NUMBER
+ENAME										VARCHAR2
+JOB											VARCHAR2
+MGR (direct superior, report to whom)		NUMBER
+HIREDATE									DATE
+SAL											NUMBER
+COMM (bonus)								NUMBER
+DEPTNO										NUMBER
+
+dept table:
+FILEDS:										TYPES:
+DEPTNO										NUMBER(2)
+DNAME										VARCHAR2(14)
+LOC											VARCHAR2(13)
+
+
+2. Basic Query
+
+SQL>desc dept;
+SQL>select * from dept;
+
+-- show operation time
+SQL>set timing on;
+
+SQL> select ename, sal from emp;
+
+-- create huge data in tables 2^n
+SQL> insert into users (userid, username, userpss) select * from users;
+SQL> select count(*) from users;
+
+SQL> select distinct deptno, job from emp;
+
+-- ORALCE field value is case sensitive
+SQL> select depno, job, sal from emp where ename='smith';  -- empty
+SQL> select depno, job, sal from emp where ename='SMITH';  -- 2 rows
+
+
+-- Annual salary
+SQL> select sal*13+comm*13 as ANNUAL_SAL, ename from emp;
+-- issue any field has null, the cal result is null
+SQL> select sal*13+nvl(comm, 0)*13 as ANNUAL_SAL, ename, comm from emp
+
+
+-- where
+SQL> select ename, sal from emp where sal > 3000;
+-- DATE operation highlight
+SQL> select ename, hiredate from emp where hiredate > '1-1月-1982';
+SQL> select ename, sal from emp where sal between 2000 and 2500; -- both inclusive
+SQL> select ename, sal from emp where ename like 'S%';
+-- the third element is O
+SQL> select ename, sal from emp where ename like '__O%'
+SQL> select * from emp where empno in (123,345,800);
+SQL> select * from emp where mgr is null;
+
+
+--logic combination
+SQL> select * from emp where (sal>500 or job='Manager') and ename like 'J%';
+-- question: only select the field with its first letter is uppercase
+
+--order by
+SQL> select * from emp order by sal desc;  -- or asc
+SQL> select * from emp order by deptno asc, sal desc;
+
+--alias highlight
+SQL> select ename, (sal+nvl(comm,0))*12 as annual_sal from emp order by annual_sal asc;
+
+
+3. Advanced Query
+
+MAX(), MIN(), AVG(), SUM(), COUNT()
+
+-- sal = max(sal) is wrong, aggregate functions can't be put in where
+SQL> select ename, sal from emp e1 where sal = (select max(sal) from emp e2); 
+
+
+
