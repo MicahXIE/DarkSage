@@ -26,6 +26,11 @@ public class TestOra {
 	    		System.out.println("user: " + rs.getString(2));
 	    	}
 
+	    	rs.close();
+	    	sm.close();
+	    	ct.close();
+
+
 	    } catch (Exception e){
 	    	e.printStackTrace();
 	    }
@@ -43,9 +48,9 @@ public class TestOra {
 	    try {
 
 	        //1. load driver
-	        Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
+	        Class.forName("oracle.jdbc.driver.OracleDriver");
 	    	//2. get connection
-	    	Connection ct=DriverManager.getConnection("jdbc:odbc:testsp","scott","m123");
+	    	Connection ct=DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:myoral","scott","m123");
 
 	    	Statement sm=ct.createStatement();
 	    	ResultSet rs=sm.executeQuery("select * from emp");
@@ -54,8 +59,135 @@ public class TestOra {
 	    		System.out.println("user: " + rs.getString(2));
 	    	}
 
+	    	rs.close();
+	    	sm.close();
+	    	ct.close();
+
 	    } catch (Exception e){
 	    	e.printStackTrace();
 	    }
 	}
 }
+
+
+
+2. TO_DATE
+
+no need to insert 11-11月-1988
+
+insert into emp values(9997, 'xiaohong2', 'MANAGER', 7782, to_date('1988-12-12', 'yyyy-mm-dd'), 78.9, 55.33, 10);
+
+
+insert into emp values(9997, 'xiaohong2', 'MANAGER', 7782, to_date('1988/12/12', 'yyyy/mm/dd'), 78.9, 55.33, 10);
+
+
+3. insert, update by using existing rows
+
+4. transaction & lock (consistency 一致性)
+
+programe A, B, C
+
+A -> table M add lock
+
+B, C -> waiting queue
+
+
+after A commit, A release the lock of table M. B will set the lock and 
+operate the table;
+
+
+5. savepoint
+
+SQL> savepoint a1;
+SQL> savepoint a2;
+SQL> rollback to a2;
+SQL> rollback to a1;
+
+all these operation must run before commit the transactions,
+otherwise savepoint won't work; exit will automatically commit transactions;
+only commit, all the operations will truly happen in databases;
+
+SQL> savepoint a3;
+SQL> commit;
+SQL> rollback to a3;
+
+will hit error:
+not such savepoint
+
+
+
+6. Java jdbc transactions and lock example
+
+e.g 1
+sm.executeUpdate("update emp set sal=sal-100 where ename='SCOTT'");
+
+//throw exception
+int i=7/0;
+
+sm.executeUpdate("update emp set sal=sal+100 where ename='SMITH'");
+
+
+e.g 2
+
+public class TestOra {
+	
+	public static void main(String[] args) {
+
+		Connection ct=null;
+
+	    try {
+
+	        //1. load driver
+	        Class.forName("oracle.jdbc.driver.OracleDriver");
+	    	//2. get connection
+	    	ct=DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:myoral","scott","m123");
+
+	    	ct.setAutoCommit(false);
+
+	    	Statement sm=ct.createStatement();
+
+			sm.executeUpdate("update emp set sal=sal-100 where ename='SCOTT'");
+
+			//throw exception
+			int i=7/0;
+
+			sm.executeUpdate("update emp set sal=sal+100 where ename='SMITH'");
+	    	
+	    	ct.commit();
+	    	
+	    	sm.close();
+	    	ct.close();
+
+	    } catch (Exception e){
+	    	try {
+	    		ct.rollback();
+	    	} catch (Exception ex) {
+	    		ex.printStackTrace();
+	    	}
+
+	    	e.printStackTrace();
+	    }
+	}
+}
+
+
+7. read only transaction
+
+read only transaction only allow select operation and not allow dml operation (insert, delete, update)
+
+set transaction read only
+
+used by system admin to summarize the airplane tickets info by a specific time
+wont influence other users to buy tickets
+only for the session set read only transaction, the new info won't update in
+this window 
+
+
+
+
+
+
+
+
+
+
