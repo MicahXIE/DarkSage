@@ -1,0 +1,61 @@
+oracle management
+
+1. Java Operation
+
+JDBC ODBC Bridge
+
+package com.sp;
+import java.sql.*
+
+
+public class TestOra {
+	
+	public static void main(String[] args) {
+
+	    try {
+
+	        //1. load driver
+	        Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
+	    	//2. get connection
+	    	Connection ct=DriverManager.getConnection("jdbc:odbc:testsp","scott","m123");
+
+	    	Statement sm=ct.createStatement();
+	    	ResultSet rs=sm.executeQuery("select * from emp");
+
+	    	while(rs.next()){
+	    		System.out.println("user: " + rs.getString(2));
+	    	}
+
+	    } catch (Exception e){
+	    	e.printStackTrace();
+	    }
+	}
+}
+
+
+JDBC
+
+
+public class TestOra {
+	
+	public static void main(String[] args) {
+
+	    try {
+
+	        //1. load driver
+	        Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
+	    	//2. get connection
+	    	Connection ct=DriverManager.getConnection("jdbc:odbc:testsp","scott","m123");
+
+	    	Statement sm=ct.createStatement();
+	    	ResultSet rs=sm.executeQuery("select * from emp");
+
+	    	while(rs.next()){
+	    		System.out.println("user: " + rs.getString(2));
+	    	}
+
+	    } catch (Exception e){
+	    	e.printStackTrace();
+	    }
+	}
+}

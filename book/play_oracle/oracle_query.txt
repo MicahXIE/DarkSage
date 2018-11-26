@@ -131,5 +131,34 @@ SQL> select deptno, avg(sal) as mysal from emp group by deptno;
 SQL> select e2.ename, e2.sal, e2.deptno, e1.sal from emp e2, (select deptno, avg(sal) as mysal from emp group by deptno) e1, where e2.deptno = e1.deptno and e2.sal > e1.sal;
 
 
+-- page
+-- rownum
+SQL> select e.*, rownum rn from (select * from emp) e;
+SQL> select e.*, rownum rn from (select * from emp) e where rownum<=10
+-- only need to modify the innerest block to specify fileds or sort fields
+SQL> select * from (select e.*, rownum rn from (select * from emp) e where rownum<=10) where rn>=6;
+-- rowid > rownum > row_number()
+
+-- subquery for create tables
+>SQL> create table myemp2 (id,ename,sal) as select empno,ename,sal from emp;
+
+
+
+
+-- union, union all, intersect, minus (faster than and, or)
+SQL> select ename, sal, job from emp where sal>2500 union
+select ename, sal, job from emp where job='MANAGER';
+-- union all won't remove duplicated rows
+-- minus (if small minus big, empty will return)
+SQL> select ename, sal, job from emp where sal>2500 minus
+select ename, sal, job from emp where job='MANAGER';
+SQL> select ename, sal, job from emp where sal>2500 intersect
+select ename, sal, job from emp where job='MANAGER';
+
+
+
+
+
+
 
 
