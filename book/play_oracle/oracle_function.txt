@@ -1,0 +1,92 @@
+oracle function
+
+1. character functions
+lower(), upper(), length(), substr(), replace()
+
+SQL> select lower(ename) from emp;
+SQL> select upper(ename) from emp;
+SQL> select ename from emp where length(ename)=5;
+-- substr string from 1 and get 3 chars 
+SQL> select substr(ename, 1, 3) from emp; 
+SQL> select upper(substr(ename, 1, 1))||lower(substr(ename, 2, length(ename)-1)) from emp;
+-- use replaceA to replace A
+SQL> select replace(ename, 'A', 'replaceA') from emp; 
+
+2. calculation functions
+round(), trunc(), floor(), ceil(), mod()
+
+abs(n), exp(n), log(m,n), power(m,n)
+
+table dual can be used to test sql
+
+
+
+SQL> select mod(10,2) from dual;
+0
+SQL> select mod(10,3) from dual;
+1
+
+SQL> select trunc(sal/30), ename from emp;
+SQL> select floor(sal/30), ename from emp;
+
+3. date functions
+sysdate, add_months(d,n), last_day(d)
+
+SQL> select sysdate from dual;
+SQL> select * from emp where sysdate>add_month(hiredate,8);
+SQL> select * from emp where sysdate>=add_month(hiredate,120);
+SQL> select trunc(sysdate-hiredate) as hiredays, ename from emp;
+-- the last day for the month in a date
+SQL> select hiredate, ename from emp where last_day(hiredate)-2=hiredate;
+
+
+4. convert functions
+implicitly conversion
+
+e.g
+create table t1(id int);
+insert into t1 values('10'); -- oracle will automatically convert
+
+-- to_char format print
+SQL> select ename, to_char(hiredate, 'yyyy-mm-dd hh24:mi:ss') from emp;
+SQL> select ename, to_char(hiredate, 'yyyy-mm-dd hh24:mi:ss'), to_char(sal, 'L99,999.99') from emp; --RMB
+
+$99,999,99
+
+SQL> select * from emp where to_char(hiredate, 'yyyy')='1980'; 
+SQL> select * from emp where to_char(hiredate, 'mm')='12';
+
+5. system functions
+1) terminal
+2) language
+3) db_name
+4) nls_date_format
+5) session_user
+6) current_schema
+7) host
+
+SQL> select sys_context('USERENV', 'db_name') from dual;
+SQL> select sys_context('USERENV', 'language') from dual;
+SQL> select sys_context('USERENV', 'session_user') from dual;
+SQL> select sys_context('USERENV', 'current_schema') from dual;
+
+user --> plan
+scott    scott 
+         data_object (roles, tablespace, views, procedure, trigger, functions)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
