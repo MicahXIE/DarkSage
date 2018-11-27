@@ -19,6 +19,26 @@ abs(n), exp(n), log(m,n), power(m,n)
 
 table dual can be used to test sql
 
+SQL> select round(comm, 1), comm from emp where ename='shunping';
+-- 55.7	55.66
+
+SQL> select trunc(comm, 1), comm from emp where ename='shunping';
+-- 55.6 55.66
+
+SQL> select trunc(comm), comm from emp where ename='shunping';
+-- 55 55.66
+
+SQL> select trunc(comm, -1), comm from emp where ename='shunping';
+-- 50 55.66
+
+
+--floor(n) ceil(n)
+SQL> select floor(comm), comm from emp where ename='shunping';
+-- 55 55.66
+
+SQL> select ceil(comm), comm from emp where ename='shunping';
+-- 56 55.66
+
 
 
 SQL> select mod(10,2) from dual;
