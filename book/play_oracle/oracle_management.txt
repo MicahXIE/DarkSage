@@ -1,199 +1,140 @@
 oracle management
 
-1. Java Operation
+1. dba responsibility
 
-JDBC ODBC Bridge
+1) install and upgrade oracle databases
+2) create tables, tablespace, views, index
+3) make plan for backup and recovery
+4) database permission management, performance tuning, troubleshooting
+5) advanced dba, project development, sql, procedure, trigger, rule, package
 
-package com.sp;
-import java.sql.*
 
+2. sys and system user
 
-public class TestOra {
-	
-	public static void main(String[] args) {
+sys -> sys plan (basic table, dynamic views)
+roles:
+dba (database admin), sysdba(system admin), sysoper(system operator)
 
-	    try {
+SQL> conn sys/change_on_install; -- error
+SQL> conn sys/change_on_install as sysdba; (must specify sysdba or sysoper)
 
-	        //1. load driver
-	        Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
-	    	//2. get connection
-	    	Connection ct=DriverManager.getConnection("jdbc:odbc:testsp","scott","m123");
+sysdba > sysoper > dba
 
-	    	Statement sm=ct.createStatement();
-	    	ResultSet rs=sm.executeQuery("select * from emp");
+system -> system plan (secondary data)
+roles:
+dba, sysdba
 
-	    	while(rs.next()){
-	    		System.out.println("user: " + rs.getString(2));
-	    	}
+SQL> conn system/manager; -- default dba
+SQL> conn system/manager as sysdba; -- also can
 
-	    	rs.close();
-	    	sm.close();
-	    	ct.close();
 
+SQL> show parameter;
 
-	    } catch (Exception e){
-	    	e.printStackTrace();
-	    }
-	}
-}
 
+3. backup and recovery
 
-JDBC
+export vs import
 
+export
 
-public class TestOra {
-	
-	public static void main(String[] args) {
+table, plan, databases
+common option:
+userid, tables, owner, full=y, inctype, rows, file
 
-	    try {
+table -> disk
+1) export table
+SQL> exp userid=scott/m123@myora1 tables=(emp,dept) file=d:\e1.dmp
+SQL> exp userid=system/manager@myora1 tables=(scott.emp) file=d:\e2.dmp
 
-	        //1. load driver
-	        Class.forName("oracle.jdbc.driver.OracleDriver");
-	    	//2. get connection
-	    	Connection ct=DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:myoral","scott","m123");
+2) export table structure
+SQL> exp userid=scott/m123@accp tables=(emp) file=d:\e3.dmp rows=n;
+-- big table use below method
+SQL> exp userid=scott/m123@accp tables=(emp) file=d:\e3.dmp direct=y;
 
-	    	Statement sm=ct.createStatement();
-	    	ResultSet rs=sm.executeQuery("select * from emp");
+3) export owner/plan
+SQL> exp scott/m123@myora1 owner=scott file=d:\scott.dmp;
+SQL> exp system/manager@myora1 owner(system,scott) file=d:\system.dmp
 
-	    	while(rs.next()){
-	    		System.out.println("user: " + rs.getString(2));
-	    	}
+4) export databases
+-- increment backup
+SQL> exp userid=system/manager@myora1 full=y inctype=complete file=d:\x.dmp
 
-	    	rs.close();
-	    	sm.close();
-	    	ct.close();
 
-	    } catch (Exception e){
-	    	e.printStackTrace();
-	    }
-	}
-}
+import
 
+under BIN path
 
+1)import table
+SQL> imp userid=scott/m123@myora1 tables=(emp) file=d:\xx.dmp
+SQL> imp userid=system@manager@myora1 tables=(emp) file=d:\xx.dmp touser=scott;
 
-2. TO_DATE
+2) import table structure
+SQL> imp userid=scott/m123@myora1 tables=(emp) file=d:\xx.dmp rows=n;
 
-no need to insert 11-11月-1988
+3) import data
+SQL> imp userid=scott/m123@myora1 tables=(emp) file=d:\xx.dmp ignore=y;
 
-insert into emp values(9997, 'xiaohong2', 'MANAGER', 7782, to_date('1988-12-12', 'yyyy-mm-dd'), 78.9, 55.33, 10);
+4) import plan
+SQL> imp userid=scott/m123 file=d:\xxx.dmp
+SQL> imp userid=system/manager file=d:\xxx.dmp fromuser=system touser=scott;
 
+5) import database
+SQL> imp userid=system/manager full=y file=d:\xxx.dmp
 
-insert into emp values(9997, 'xiaohong2', 'MANAGER', 7782, to_date('1988/12/12', 'yyyy/mm/dd'), 78.9, 55.33, 10);
 
+4. data dictionary and dynamic views
 
-3. insert, update by using existing rows
+data dictionary (system info or static info)
+1) under sys plan
+2) only support select
+3) includes base table and data dictionary views (user_xxx, all_xxx, dba_xxx)
 
-SQL> create table kkk (myId number(4), myname varchar2(50), myDpet number(5));
-SQL> insert into kkk (myId, myname, mydept) select empno, ename, deptno from emp where deptno=10;
-SQL> update emp set (job,sal,comm)=(select job,sal,comm from emp where ename='SMITH') where ename='SCOTT';
+e.g
+-- user_tables, all_tables, dba_tables;
+-- tables current user create
+SQL> select table_name from user_tables;
+-- tables current user can visit 
+SQL> select table_name from all_tables;
+-- must dba role, all the tables in all the plans
+SQL> select table_name from dba_tables;
 
-
-
-4. transaction & lock (consistency 一致性)
-
-programe A, B, C
-
-A -> table M add lock
-
-B, C -> waiting queue
-
-
-after A commit, A release the lock of table M. B will set the lock and 
-operate the table;
-
-
-5. savepoint
-
-SQL> savepoint a1;
-SQL> savepoint a2;
-SQL> rollback to a2;
-SQL> rollback to a1;
-
-all these operation must run before commit the transactions,
-otherwise savepoint won't work; exit will automatically commit transactions;
-only commit, all the operations will truly happen in databases;
-
-SQL> savepoint a3;
-SQL> commit;
-SQL> rollback to a3;
-
-will hit error:
-not such savepoint
-
-
-
-6. Java jdbc transactions and lock example
-
-e.g 1
-sm.executeUpdate("update emp set sal=sal-100 where ename='SCOTT'");
-
-//throw exception
-int i=7/0;
-
-sm.executeUpdate("update emp set sal=sal+100 where ename='SMITH'");
-
-
-e.g 2
-
-public class TestOra {
-	
-	public static void main(String[] args) {
-
-		Connection ct=null;
-
-	    try {
-
-	        //1. load driver
-	        Class.forName("oracle.jdbc.driver.OracleDriver");
-	    	//2. get connection
-	    	ct=DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:myoral","scott","m123");
-
-	    	ct.setAutoCommit(false);
-
-	    	Statement sm=ct.createStatement();
-
-			sm.executeUpdate("update emp set sal=sal-100 where ename='SCOTT'");
-
-			//throw exception
-			int i=7/0;
-
-			sm.executeUpdate("update emp set sal=sal+100 where ename='SMITH'");
-	    	
-	    	ct.commit();
-	    	
-	    	sm.close();
-	    	ct.close();
-
-	    } catch (Exception e){
-	    	try {
-	    		ct.rollback();
-	    	} catch (Exception ex) {
-	    		ex.printStackTrace();
-	    	}
-
-	    	e.printStackTrace();
-	    }
-	}
-}
-
-
-7. read only transaction
-
-read only transaction only allow select operation and not allow dml operation (insert, delete, update)
-
-set transaction read only
-
-used by system admin to summarize the airplane tickets info by a specific time
-wont influence other users to buy tickets
-only for the session set read only transaction, the new info won't update in
-this window 
-
-
-
-
-
-
-
+-- username, permission, role stored in data dictionary
+-- dba_users, dba_sys_privs, dba_tab_privs, dba_col_privs, dba_role_privs
+SQL> select * from dba_role_privs where grantee='SCOTT';
+							   privileges
+
+	             			-> privilege 1
+role (connect, resource)    -> privilege 2
+							-> privilege 3
+
+
+system privilege (database level), object privilege (table level)
+-- how many system privilege 140
+SQL> select * from system_privilege_map order by name
+-- how many object privilege 16
+SQL> select distinct privilege from dba_tab_privs;
+-- how many roles 25
+SQL> select * from dba_roles;
+-- how many system privilege for a role
+SQL> select * from dba_sys_privs where grantee='CONNECT';
+SQL> select * from role_sys_privs where grantee='CONNECT';
+-- how many object privilege for a role
+SQL> select * from dba_tab_privs where grantee='CONNECT';
+-- how to check the role for a user
+SQL> select * from dba_role_privs where grantee='SCOTT';
+
+SQL> select tablespace from dba_tablespaces;
+SQL> select username from dba_users;
+
+-- check the data dict views user can visit
+SQL> select * from dict where comment like '%grant%'
+-- check current db full name
+SQL> select * from global_name;
+
+
+dynamic performance views (system running or dynamic info)
+
+when user starts the oracle server, system will automatically create dynamic performance views. when user stops the oracle server, system will delete dynamic views. Dynamic views all start with v_$, synonym v$ e.g v_$datafile and v$datafile. Only sys and dba can check dynamic performance views.
 
 
 
