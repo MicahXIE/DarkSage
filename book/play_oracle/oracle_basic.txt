@@ -180,7 +180,8 @@ SQL>drop table student;
 
 tips
 
-VARCHAR is reserved by Oracle to support distinction between NULL and empty string in future, as ANSI standard prescribes. VARCHAR2 does not distinguish between a NULL and empty string, and never will. If you rely on empty string and NULL being the same thing, you should use VARCHAR2 .
+VARCHAR is reserved by Oracle to support distinction between NULL and empty string in future, as ANSI standard prescribes. 
+VARCHAR2 does not distinguish between a NULL and empty string, and never will. If you rely on empty string and NULL being the same thing, you should use VARCHAR2 .
 
 
 
