@@ -136,6 +136,9 @@ dynamic performance views (system running or dynamic info)
 
 when user starts the oracle server, system will automatically create dynamic performance views. when user stops the oracle server, system will delete dynamic views. Dynamic views all start with v_$, synonym v$ e.g v_$datafile and v$datafile. Only sys and dba can check dynamic performance views.
 
+
+5. tablespace
+
 table space: databases logical part
 data files: databases physical part
 
@@ -178,13 +181,47 @@ SQL> alter tablespace XXX offline;
 SQL> alter tablespace XXX online;
 SQL> alter tablespace XXX read only;
 SQL> alter tablespace XXX read write;
+-- system user
+SQL> drop tablespace XXX including contents and datafiles;
+
 
 -- system tablespace can't be changed to read only
 
 SQL> select * from all_tables where tablespace_name='XXX';
+-- user_tables
 SQL> select tablespace_name, table_name from user_tables where table_name='emp';
 
 
+-- extend tablespace
+-- add datafile
+SQL> alter tablespace sp01 add datafile 'd:\test\sp02.dbf' size 20m
+
+-- resize datafile 
+SQL> alter tablespace XXX 'd:\test\sp01.dbf' resize 20m;
+
+-- set file auto extend
+SQL> alter tablespace XXX 'd:\test\sp01.dbf' autoextend on next 10m maxsize 500m;
+
+
+-- move data file
+1) check the tablespace for the datafile
+SQL> select tablespace_name from dba_data_files where file_name='d:\sp001.dbf';
+2) change tablespace to offline
+SQL> alter tablespace sp01 offline;
+3) move data file to specific path
+SQL> host move d:\sp001.dbf c:\sp01.dbf
+4) change the tablespace datafile path
+SQL> alter tablespace sp01 rename datafile 'd:\sp001.dbf' to 'c:\sp001.dbf'
+5) change tablespace status to online
+SQL> alter tablespace data01 online;
+
+
+
+-- other tablespace
+Indexes tablespace
+undo tablespace
+temp tablespace
+non-standard tablespace
 
 
 
