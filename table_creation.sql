@@ -50,6 +50,20 @@ INSERT INTO Functions (X, Y)
                     (20, 20), (20, 20), (20, 21), (23, 22), (22, 23), (21, 20);
 
 
+4. Employee and Department
 
+CREATE TABLE department(
+  ID INT NOT NULL PRIMARY KEY,
+  NAME VARCHAR(32),
+  LOCATION VARCHAR(100)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `employee`(
+  `ID` INT NOT NULL PRIMARY KEY,
+  `NAME` VARCHAR(32) NOT NULL,
+  `SALARY` INT NOT NULL,
+  `DEPT_ID` INT DEFAULT NULL,
+  FOREIGN KEY(`DEPT_ID`) REFERENCES department(`ID`)
+)
 
 

@@ -136,5 +136,69 @@ dynamic performance views (system running or dynamic info)
 
 when user starts the oracle server, system will automatically create dynamic performance views. when user stops the oracle server, system will delete dynamic views. Dynamic views all start with v_$, synonym v$ e.g v_$datafile and v$datafile. Only sys and dba can check dynamic performance views.
 
+table space: databases logical part
+data files: databases physical part
+
+databases -> tablespace -> data files
+
+database logical structure:
+
+table space -> field -> sector -> block
+
+table space:
++-----+-----+
+|block|sect-|
++-----+or	+
+|     |     |
++-----+-----+
+|field->file|
++           +
+|           |
++-----------+
+|           |
++           +
+|           |
++-----------+
+
+1) dba can control the disk space by using table space
+2) dba can deploy different types data to different places. 
+This will improve the I/O performance and also good for backup and recovery.
+
+
+-- create tablespace data01, use data01.dbf data file, sector size 128k (need dba role，size max 500m for 1 file)
+SQL> create tablespace data01 datafile 'd:\test\data01.dbf' size 20m uniform size 128k
+
+-- use tablespace (default use system tablespace)
+SQL> create table mypart(deptno number(4), dname varchar2(14), loc varchar2(13)) tablespace data01;
+
+-- tablespace includes Tables, Indexes, Clusters
+
+-- change tablespace status
+SQL> alter tablespace XXX offline;
+SQL> alter tablespace XXX online;
+SQL> alter tablespace XXX read only;
+SQL> alter tablespace XXX read write;
+
+-- system tablespace can't be changed to read only
+
+SQL> select * from all_tables where tablespace_name='XXX';
+SQL> select tablespace_name, table_name from user_tables where table_name='emp';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

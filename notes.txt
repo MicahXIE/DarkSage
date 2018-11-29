@@ -309,6 +309,12 @@ mysql: LIMIT 1
 oracle: ROWNUM<=1
 
 
+6. mysql databases
+
+basic datatypes:
+
+
+
 
 
 
