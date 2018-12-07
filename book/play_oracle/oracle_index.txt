@@ -1,0 +1,4 @@
+Index
+
+1. index is used to improve the performance for reading and writing data.
+Set indexes properly can significantly reduce the i/o operatoins
