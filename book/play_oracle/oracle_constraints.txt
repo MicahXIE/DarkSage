@@ -32,3 +32,98 @@ if not in this scope, will report error.
 
 3. shop vending system example
 
+goods (goodsId, goodsName, unitprice, category, provider)
+customer (customerId, name, address, email, sex, cardId)
+purchase (customerId, goodsId, nums)
+
+SQL:
+
+1) creatable as rules below:
+every table has primary key and foreign key
+customer name can not be null
+unitprice must be more than 0, nums must between 1 and 30
+email can not be duplicated
+sex must be male and female, default male
+
+SQL> create table goods (
+goodsId char(8) primary key,
+goodsNmae varchar2(30),
+unitprice number(10,2) check(unitprice > 0),
+category varchar2(8),
+provider varchar2(30)
+);
+
+SQL> create table customer(
+customerId char(8) primary key,
+name varchar2(50) not null,
+address varchar2(50),
+email varchar2(50) unique,
+sex char(1) default 'M' check (sex in ('M','F')),
+cardId char(18)
+);
+
+SQL> create table purchase(
+customerId char(8) references cutomer(customerId),
+goodsId char(8) references goods(goodsId),
+nums number(10) check (nums between 1 and 30)
+);
+
+
+2) alter table
+add goodsName not null
+SQL> alter table goods modify  goodsName not null;
+
+add cardId unique
+SQL> alter table customer add constraint cardunqiue unique(cardId);
+
+add customer address only can be 'A', 'B', 'C'
+SQL> alter table customer add constraint addresscheck check (address in ('A', 'B', 'C'));
+
+
+3) remove constraints
+
+SQL> alter table XXX drop constraint XXX;
+SQL> alter table XXX drop primary key;
+
+//master and slave table
+SQL> alter table XXX drop primary key cascade;
+
+
+4) show constraints info
+data dict views: user_constraints
+
+SQL>select constraint_name, constraint_type, status, validated from user_constraints
+where table_name='goods';
+
+SQL>select column_name, position from user_cons_columns where constraint_name='unique';
+
+
+5) create contraint methods
+
+column definition
+SQL> create table department4(
+dept_id number(2) constraint pk_department primary key,
+name varchar2(12),
+loc varchar2(12)
+);
+
+table definition
+SQL> create table employee2(
+emp_id number(4),
+name varchar2(15),
+dept_id number(2),
+constraint pk_employee primary key (emp_id),
+constraint fk_department foreign key (dept_id)
+references department4(dept_id)
+);
+
+
+
+
+
+
+
+
+
+
+
